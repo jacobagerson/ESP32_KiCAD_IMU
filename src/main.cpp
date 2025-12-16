@@ -1,5 +1,3 @@
-//Physical Setup: Using ESP32S2: 21 - SDA, 22 - SCL
-//Physical Setup: using Esp32 C3 15 - SDA, 16 - SCL
 #include <Arduino.h>
 #include <WiFi.h>
 #include <OSCMessage.h>
@@ -29,8 +27,6 @@ float gyroBiasZ = 0.0f;
 const float TIMESTEP = 0.5f; // 50 ms
 const float alpha = 0.98f;    // Complementary filter coefficient
 
-//PIN DECLARATIONS FOR PCB (IO)
-
 // state counter (button-driven mode index)
 float state_counter = 0;
 
@@ -39,6 +35,9 @@ float lastButtonReading = HIGH; // last raw reading from pin
 float lastButtonStableState = HIGH; // debounced stable state
 unsigned long lastDebounceTime = 0;
 const unsigned long debounceDelayMs = 50; // ms
+
+
+//PIN DECLARATIONS FOR PCB (IO)
 
 const int sda_pin = 3;
 const int scl_pin = 2;
@@ -51,9 +50,7 @@ const int led_pin2 = 6;         // Pin for status LED
 const int led_pin3 = 7;         // Pin for status LED
 const int led_pin4 = 8;         // Pin for status LED
 
-
 float pot_value = 0.0;          // Variable to store potentiometer value
-// put function declarations here:
 
 const char* ssid = "Tufts_Wireless";       // e.g., "Tufts_IoT" or "Tufts_Wireless"
 const char* password = "";   // leave "" if it's an open network
@@ -61,7 +58,7 @@ unsigned int localPort = 7773; // local port to listen for OSC packets
 unsigned int sendPort = 7771; // Port to send to Max 
 
 WiFiUDP Udp;
-const IPAddress outIp(10,243,86,184); // IP to Send To
+const IPAddress outIp(10,243,86,184); // IP to Send to
 
 Adafruit_MPU6050 mpu;
 
@@ -130,7 +127,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   pot_value = analogRead(0); // Read potentiometer value
   sendOSC();
 
@@ -232,7 +228,6 @@ void sendOSC() {
   msg.add(roll_deg);
   msg.add(yaw_deg);
   msg.add(pot_value);
-  //msg.add(state_counter);
 
   // Online bias adaptation: if device appears stationary (raw angular rates near bias),
   // slowly update bias estimates to compensate drift/temperature changes.
